@@ -59,11 +59,19 @@ if "feedback_submitted" not in st.session_state:
     st.session_state.feedback_submitted = False
 
 # ---------- Model ----------
-MODEL_URL = "https://drive.google.com/uc?id=13hWdJjIbYuX25PukSXpjsTK_dIOAqPue"
+import requests
+
+MODEL_URL = "https://drive.google.com/uc?export=download&id=13hWdJjIbYuX25PukSXpjsTK_dIOAqPue"
+MODEL_PATH = "best.pt"
 
 @st.cache_resource
 def load_model():
-    return YOLO(MODEL_URL)
+    if not os.path.exists(MODEL_PATH):
+        with st.spinner("Downloading model..."):
+            r = requests.get(MODEL_URL)
+            with open(MODEL_PATH, "wb") as f:
+                f.write(r.content)
+    return YOLO(MODEL_PATH)
 
 model = load_model()
 
