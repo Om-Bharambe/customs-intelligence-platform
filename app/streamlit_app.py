@@ -59,13 +59,13 @@ if "feedback_submitted" not in st.session_state:
     st.session_state.feedback_submitted = False
 
 # ---------- Model ----------
-MODEL_PATH = "model/best.pt"
+MODEL_URL = "https://drive.google.com/uc?id=13hWdJjIbYuX25PukSXpjsTK_dIOAqPue"
 
-if not os.path.exists(MODEL_PATH):
-    st.error("Model file not found in model/best.pt")
-    st.stop()
+@st.cache_resource
+def load_model():
+    return YOLO(MODEL_URL)
 
-model = YOLO(MODEL_PATH)
+model = load_model()
 
 # ---------- Sidebar ----------
 st.sidebar.title("Control Panel")
